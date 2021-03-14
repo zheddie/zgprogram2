@@ -14,6 +14,8 @@ function addnew() {
     if(title ==="" ) alert("Title can not be NULL");
     else{
         var markup = $('.notecontent').summernote('code');
+        markup=markup.replaceAll('\'','\\\'');
+        title=title.replaceAll('\'','\\\'');
         const updateData = {"title":title, "content":markup};
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -44,9 +46,11 @@ function dodelete(xhttp) {
     console.log("deleteOneNote done!?");
     go();
 };
-function save() {
+function UpdateNote() {
     var markup = $('.notecontent').summernote('code');
+    markup=markup.replaceAll('\'','\\\'');
     const title = document.getElementById('title').value;
+    title=title.replaceAll('\'','\\\'');
     // console.log(document.currentID);
     // console.log(title);
     // console.log(markup);

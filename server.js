@@ -29,6 +29,7 @@ app.get('/notes', (req, res) => {
     
     try {
         let search = req.query.search;
+        console.log("search:"+search);
         let query="select title,idntfr from zgprogram where status=0 ";
         if (search !== "all" && search!==""){
             query += "and content like '%"+search+"%' or title like '%"+search+"%'";
@@ -79,7 +80,7 @@ app.put('/onenote', (req, res) => {
             if(err) throw err;
             //rt = JSON.parse(result);
             let max= result[0].max+1;
-            let addnew='insert into zgprogram values("'+title+'","'+content+'","'+max.toString().padStart(10,'0')+'",NOW(),0,NOW())';
+            let addnew='insert into zgprogram values("'+title+'",\''+content+'\',"'+max.toString().padStart(10,'0')+'",NOW(),0,NOW())';
             console.log(addnew);
             conn.query(addnew,(err,result)=>{
                 if(err) throw err;
