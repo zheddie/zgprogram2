@@ -11,26 +11,37 @@
         <script src="summernote.dist/summernote-bs4.min.js"></script>
     </head>
     <body>
-        <h1>START</h1>
-        <div class="ProductFieldNameEn"></div>
+        <h1>START</h1><button id="load" onclick="loadHtml()">load</button>
+        <div id="sn" class="ProductFieldNameEn"></div>
+        <input type='file' onchange='onChooseFile(event, onFileLoad.bind(this, "contents"))' />
+        <p hidden id="contents" ></p>
         <script type="text/javascript">
-            const dt = new Date();
-            console.log( dt.format("dd/MM/yyyy hh:mm TT"));
-        </script>
-        <script type="text/javascript">
-
-            $(function () {
-                function download_to_textbox(url, el) {
-                    $.get(url, null, function (data) {
-                        el.val(data);
-                    }, "text");
-                }
-                download_to_textbox("/Volumes/CSDISK/worktemp/evernote/tryimage/csc同事.html", $("#ProductFieldNameEn"));
-            });   
-            $("#ProductFieldNameEn").summernote();
+            $(".ProductFieldNameEn").summernote();
+            $(".ProductFieldNameEn").summernote("code","hello");
             function logKey(e){
                 console.log(e.key);
             }
+            
+            function onFileLoad(elementId, event) {
+    document.getElementById(elementId).innerText = event.target.result;
+    $(".ProductFieldNameEn").summernote("code",event.target.result);
+}
+
+function onChooseFile(event, onLoadFileHandler) {
+    if (typeof window.FileReader !== 'function')
+        throw ("The file API isn't supported on this browser.");
+    let input = event.target;
+    if (!input)
+        throw ("The browser does not properly implement the event object");
+    if (!input.files)
+        throw ("This browser does not support the `files` property of the file input.");
+    if (!input.files[0])
+        return undefined;
+    let file = input.files[0];
+    let fr = new FileReader();
+    fr.onload = onLoadFileHandler;
+    fr.readAsText(file);
+}
         </script>
     </body>
 </html>

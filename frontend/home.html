@@ -16,7 +16,7 @@
         <table width="100%">
         <tr><td colspan="2"> 
             <button  id="go" class="btn btn-primary" onclick="go()" type="button">GO!</button>
-            <input id="searchinput" type="text" size=120 on_click="si_click()"> </input>
+            <input id="searchinput" type="text" size=150 on_click="si_click()"> </input>
             <script type="text/javascript">
                 var inp = document.getElementById("searchinput");
                 inp.addEventListener('keyup', function (e) {
@@ -37,19 +37,19 @@
     <td width="*">
         <div id="main">
         <table width="100%">
-            <tr><td><button id="save" class="btn btn-primary"  onclick="UpdateNote()">Save</button></td><td></td>
+            <tr><td><button id="save" class="btn btn-primary"  onclick="UpdateNote()">Save</button></td>
                 <td><button id="addnew" class="btn btn-primary" onclick="addnew()">Add</button></td>
+                <td><input type='file' onchange='onChooseFile(event, onFileLoad.bind(this, "contents"))' /><p hidden id="contents" ></p></td>
                 <td><button id="delete" class="btn btn-danger" onclick="deleteNote()">Delete</button></td>
                 </tr>
-            <tr><td colspan="4">Title:<input id="title" size=150></td></tr>
+            <tr><td colspan="4">Title:<input id="title" size=100></td></tr>
             <tr><td colspan="4">
             <div class="notecontent"></div>
         <script type="text/javascript">
             $('.notecontent').summernote({
               placeholder: 'Hello Bootstrap 4',
               tabsize: 2,
-              height: 800,
-              width: 1800
+              height: 800
             });
             $('.notecontent').summernote({focus: true});
         </script>
