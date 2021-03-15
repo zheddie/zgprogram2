@@ -10,7 +10,7 @@ function go(){
 
 function addnew() {
     
-    const title = document.getElementById('title').value;
+    var title = document.getElementById('title').value;
     if(title ==="" ) alert("Title can not be NULL");
     else{
         var markup = $('.notecontent').summernote('code');
@@ -34,12 +34,15 @@ function doadd(){
 function deleteNote(){
     if(!document.currentID) alert("Not note was selected!");
     else{
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {dodelete(this);}
-        };
-        xhttp.open("DELETE", "http://localhost:18701/onenote?id="+document.currentID, true);
-        xhttp.send();        
+        const cfm = confirm("Do you want to delete this item? ");
+        if(cfm){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {dodelete(this);}
+            };
+            xhttp.open("DELETE", "http://localhost:18701/onenote?id="+document.currentID, true);
+            xhttp.send(); 
+        }       
     }
 };
 function dodelete(xhttp) {
@@ -49,7 +52,7 @@ function dodelete(xhttp) {
 function UpdateNote() {
     var markup = $('.notecontent').summernote('code');
     markup=markup.replaceAll('\'','\\\'');
-    const title = document.getElementById('title').value;
+    var title = document.getElementById('title').value;
     title=title.replaceAll('\'','\\\'');
     // console.log(document.currentID);
     // console.log(title);
