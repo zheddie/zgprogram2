@@ -18,6 +18,7 @@
             console.log( dt.format("dd/MM/yyyy hh:mm TT"));
         </script>
         <script type="text/javascript">
+
             $(function () {
                 function download_to_textbox(url, el) {
                     $.get(url, null, function (data) {
@@ -27,6 +28,9 @@
                 download_to_textbox("/Volumes/CSDISK/worktemp/evernote/tryimage/csc同事.html", $("#ProductFieldNameEn"));
             });   
             $("#ProductFieldNameEn").summernote();
-             </script>
+            function logKey(e){
+                console.log(e.key);
+            }
+        </script>
     </body>
 </html>

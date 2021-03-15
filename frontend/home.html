@@ -17,6 +17,15 @@
         <tr><td colspan="2"> 
             <button  id="go" class="btn btn-primary" onclick="go()" type="button">GO!</button>
             <input id="searchinput" type="text" size=120 on_click="si_click()"> </input>
+            <script type="text/javascript">
+                var inp = document.getElementById("searchinput");
+                inp.addEventListener('keyup', function (e) {
+                    // console.log(e.key+e.keyCode);
+                    if (e.key === 'Enter' || e.keyCode === 13) {
+                        go();
+                    }
+                });
+            </script>
             <!-- <input type="checkbox"id="cbtitle" onclick="check_title()">Title</input>
             <input type="checkbox"id="cbtags" onclick="check_title()">Tags</input> -->
         </td>

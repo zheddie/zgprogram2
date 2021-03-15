@@ -67,6 +67,11 @@ app.get('/onenote', (req, res) => {
         res.send({'error': err.toString()});
     }
 })
+function refinestring(inp){
+    inp =inp.replace(/\\/g,'\\\\');
+    inp = inp.replace(/\'/g,'\\\'');
+    return (inp);
+}
 // Add new note
 app.put('/onenote', (req, res) => {
     try {
@@ -80,6 +85,8 @@ app.put('/onenote', (req, res) => {
             if(err) throw err;
             //rt = JSON.parse(result);
             let max= result[0].max+1;
+            content = refinestring(content);
+            title = refinestring(title);
             let addnew='insert into zgprogram values("'+title+'",\''+content+'\',"'+max.toString().padStart(10,'0')+'",NOW(),0,NOW())';
             console.log(addnew);
             conn.query(addnew,(err,result)=>{
@@ -105,6 +112,8 @@ app.post('/onenote', (req, res) => {
         if (title === '' && content === ''){
             res.send({'error': 'Title&Content can not be NULL.'});
         }else{
+            content = refinestring(content);
+            title = refinestring(title);
             let update='update zgprogram set title="'+title+'",content=\''+content+'\',accessdate=NOW() where idntfr="'+id+'"';
             console.log(update);
             conn.query(update,(err,result)=>{
