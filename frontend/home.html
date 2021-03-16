@@ -15,8 +15,8 @@
     <body>
         <table width="100%">
         <tr><td colspan="2"> 
-            <button  id="go" class="btn btn-primary" onclick="go()" type="button">GO!</button>
-            <input id="searchinput" type="text" size=150 on_click="si_click()"> </input>
+            <button  id="go" class="btn btn-primary" onclick="go()" type="button" >GO!</button>
+            <input id="searchinput" type="text" size=150 on_click="si_click()" autocomplete="on"> </input>
             <script type="text/javascript">
                 var inp = document.getElementById("searchinput");
                 inp.addEventListener('keyup', function (e) {
@@ -30,12 +30,13 @@
             <input type="checkbox"id="cbtags" onclick="check_title()">Tags</input> -->
         </td>
     </tr>
-    <tr><td width="25%">
-        <div id="searchResult"></div>
+    <tr><td valign="top" >
+        <br><h3 color="green">MyNote</h3><br>
+        <div style="width:220px; max-width:220px;" id="searchResult"></div>
         <script>loadAllNotes()</script>
     </td>
-    <td width="*">
-        <div id="main">
+    <td >
+        <div style="width:1520px; max-width:1520px;" id="main">
         <table width="100%">
             <tr><td><button id="save" class="btn btn-primary"  onclick="UpdateNote()">Save</button></td>
                 <td><button id="addnew" class="btn btn-primary" onclick="addnew()">Add</button></td>
@@ -44,14 +45,44 @@
                 </tr>
             <tr><td colspan="4">Title:<input id="title" size=100></td></tr>
             <tr><td colspan="4">
-            <div class="notecontent"></div>
+            <div style="width:320px; max-width:320px;" class="notecontent" ></div>
         <script type="text/javascript">
             $('.notecontent').summernote({
-              placeholder: 'Hello Bootstrap 4',
+              placeholder: 'No note is selected.',
               tabsize: 2,
-              height: 800
+              height: 800,
+              toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline','strikethrough', 'superscript', 'subscript', 'clear']],
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']],
+                ]
             });
             $('.notecontent').summernote({focus: true});
+            $(".notecontent").summernote({
+                onChange: function() { document.pendingchange = true; }    // callback as option 
+            });
+            // onChange callback
+            $('.notecontent').summernote({
+            callbacks: {
+                onChange: function(contents, $editable) {
+                console.log('onChange:', contents, $editable);
+                }
+            }
+            });
+
+            // summernote.change
+            $('.notecontent').on('summernote.change', function(we, contents, $editable) {
+            console.log('summernote\'s content is changed.');
+            document.pendingchange = true;
+            });
+
+
         </script>
         </td></tr></table>
     </div>

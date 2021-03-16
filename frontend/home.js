@@ -80,6 +80,7 @@ function UpdateNote() {
 function updateOneNote(xhttp) {
     console.log("updateOneNote done!?");
     go();
+    document.pendingchange = false;
 }
 
 function loadAllNotes() {
@@ -94,42 +95,75 @@ function displaySearchResult(xhttp) {
     var notes = JSON.parse(xhttp.responseText);
     var newContent = "<div class='booksGallery'><table>";
     document.currentID ='';
-    notes.forEach(function(note) {
-        if(!document.currentID || document.currentID===''){
-            document.currentID = note.idntfr;
+    if (notes.length > 0){
+        notes.forEach(function(note) {
+            if(!document.currentID || document.currentID===''){
+                document.currentID = note.idntfr;
+            }
+            var processedTitle = note.title;
+            if (processedTitle.length > 50) { processedTitle = processedTitle.substring(0, 48) + "..."; } 
+            //newContent += `<tr><td><div class="gallery"><a target="_blank" href="${processedTitle}>"</a>`+
+            newContent += `<tr><td><div class="gallery">`+
+            // `<div id="id${note.idntfr}" onClick=getNoteDetails('${note.idntfr}') onMouseOver="onmouseover('${note.idntfr}')" class='galleryTitle'>${processedTitle}</div></div>`+
+            `<div id="id${note.idntfr}" onmouseover="itemmouseover('${note.idntfr}')" onmouseout="itemmouseout('${note.idntfr}')" onClick=getNoteDetails('${note.idntfr}') class='galleryTitle'>${processedTitle}</div></div>`+
+            `</td></tr>`;
+            // newContent += `<div class="gallery"><a target="_blank" href="${book.web_url}">` + 
+            //               `<img id="bookImage" src="${book.image_url}" width="600" height="400"></a>` + 
+            //               `<div onClick=getBookDetails('${book.title.replace(/\s/g, '%20')}') class='galleryTitle'>${processedTitle}</div></div>`;
+        })
+
+        newContent += "</table></div>";
+        
+        var div = document.getElementById("id"+document.currentID);
+        if(div){
+            div.style.backgroundColor = "green";
+            div.style.color="white";
         }
-        var processedTitle = note.title;
-        if (processedTitle.length > 35) { processedTitle = processedTitle.substring(0, 33) + "..."; } 
-        //newContent += `<tr><td><div class="gallery"><a target="_blank" href="${processedTitle}>"</a>`+
-        newContent += `<tr><td><div class="gallery">`+
-        // `<div id="id${note.idntfr}" onClick=getNoteDetails('${note.idntfr}') onMouseOver="onmouseover('${note.idntfr}')" class='galleryTitle'>${processedTitle}</div></div>`+
-        `<div id="id${note.idntfr}" onClick=getNoteDetails('${note.idntfr}') class='galleryTitle'>${processedTitle}</div></div>`+
-        `</td></tr>`;
-        // newContent += `<div class="gallery"><a target="_blank" href="${book.web_url}">` + 
-        //               `<img id="bookImage" src="${book.image_url}" width="600" height="400"></a>` + 
-        //               `<div onClick=getBookDetails('${book.title.replace(/\s/g, '%20')}') class='galleryTitle'>${processedTitle}</div></div>`;
-    })
-    newContent += "</table></div>";
+    }else{
+        newContent += "</table></div>";
+    }
     document.getElementById("searchResult").innerHTML = newContent;
     console.log("currentID:"+document.currentID);
-    var div = document.getElementById("id"+document.currentID);
-    div.style.backgroundColor = "green";
+    // console.log(document.currentID);
     getNoteDetails(document.currentID);
 }
-function onmouseover(id){
-    console.log(id);
-    var div = document.getElementById("id"+id);
-    div.style.backgroundColor = "gray";
-    
+function itemmouseover(id){
+    var idstr="id"+id;
+    var div = document.getElementById(idstr);
+    if(div){
+        div.style.backgroundColor = "gray";
+    }
+}
+function itemmouseout(id){
+    var idstr="id"+id;
+    var div = document.getElementById(idstr);
+    if(div){
+        div.style.backgroundColor = "white";
+    }
+    if(document.currentID === id){
+        div.style.backgroundColor = "green";
+        div.style.color="white";
+    }
 }
 function getNoteDetails(idntfr) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {displayNoteDetail(this);}
-    };
-    
-    xhttp.open("GET", RESTAPISERVER+`/onenote?id=${idntfr}`, true);
-    xhttp.send();
+    var leave = true;
+    if(document.pendingchange){
+        leave = confirm("You will LOST your local changes in current note. Leave?");
+    }
+    if (leave){
+        if(idntfr === ''){
+            $('.notecontent').summernote("code",'');
+            document.getElementById("title").value = '';
+        }else{
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {displayNoteDetail(this);}
+            };
+            
+            xhttp.open("GET", RESTAPISERVER+`/onenote?id=${idntfr}`, true);
+            xhttp.send();
+        }
+    }
 }
 function displayNoteDetail(xhttp) {
     var jsonData = JSON.parse(xhttp.responseText);
@@ -138,13 +172,20 @@ function displayNoteDetail(xhttp) {
     var noteMain = jsonData[0]['content'];
     if (document.currentID) {
         var div = document.getElementById("id"+document.currentID);
-        div.style.backgroundColor = "white";
+        if(div){
+            div.style.backgroundColor = "white";
+            div.style.color="black";
+        }
     }
     document.currentID = jsonData[0]['idntfr'];
     var div = document.getElementById("id"+document.currentID);
-    div.style.backgroundColor = "green";
+    if(div){
+        div.style.backgroundColor = "green";
+        div.style.color="white";
+    }
     document.getElementById("title").value = noteTitle;
     $('.notecontent').summernote("code",noteMain);
+    document.pendingchange = false;
 } 
 
 ////////////////////////////////////////////////////////////////
