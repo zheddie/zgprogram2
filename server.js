@@ -29,10 +29,13 @@ app.get('/notes', (req, res) => {
     
     try {
         let search = req.query.search;
-        console.log("search:"+search);
+        // console.log("search:"+search);
         let query="select title,idntfr from zgprogram where status=0 ";
         if (search !== "all" && search!==""){
-            query += "and content like '%"+search+"%' or title like '%"+search+"%'";
+            let searcharr = search.split(' ');
+            searcharr.forEach((oneitem)=>{
+                query += "and (content like '%"+oneitem+"%' or title like '%"+oneitem+"%')";
+            });
         }
         query+="order by accessdate desc limit 30";
         console.log(query);

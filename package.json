@@ -5,6 +5,7 @@
   "main": "crawler.js",
   "dependencies": {
     "express": "^4.17.1",
+    "http-server": "^0.12.3",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.7"
   },

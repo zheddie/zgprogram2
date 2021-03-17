@@ -15,24 +15,29 @@ function go(){
         xhttp.open("GET", RESTAPISERVER+"/notes?search="+searchtxt, true);
         xhttp.send();
 }
-
+//Add new note
 function addnew() {
-    
-    var title = document.getElementById('title').value;
-    if(title ==="" ) alert("Title can not be NULL");
-    else{
-        var markup = $('.notecontent').summernote('code');
-        // markup=markup.replaceAll('\'','\\\'');
-        // title=title.replaceAll('\'','\\\'');
-        const updateData = {"title":title, "content":markup};
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {doadd(this);}
-        };
-        xhttp.open("PUT", RESTAPISERVER+"/onenote", true);
-        xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhttp.send(JSON.stringify(updateData));
-    }
+    // var leave = true;
+    // if(document.pendingchange){
+    //     leave = confirm("You will LOST your local changes in current note. Leave?");
+    // }
+    // if(leave){
+        var title = document.getElementById('title').value;
+        if(title ==="" ) alert("Title can not be NULL");
+        else{
+            var markup = $('.notecontent').summernote('code');
+            // markup=markup.replaceAll('\'','\\\'');
+            // title=title.replaceAll('\'','\\\'');
+            const updateData = {"title":title, "content":markup};
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {doadd(this);}
+            };
+            xhttp.open("PUT", RESTAPISERVER+"/onenote", true);
+            xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhttp.send(JSON.stringify(updateData));
+        }
+//    }
 };
 function doadd(){
     console.log("Add note done!?");
@@ -167,7 +172,7 @@ function getNoteDetails(idntfr) {
 }
 function displayNoteDetail(xhttp) {
     var jsonData = JSON.parse(xhttp.responseText);
-    console.log(jsonData);
+    // console.log(jsonData);
     var noteTitle = jsonData[0]['title'];
     var noteMain = jsonData[0]['content'];
     if (document.currentID) {
