@@ -91,7 +91,7 @@ app.put('/onenote', (req, res) => {
             content = refinestring(content);
             title = refinestring(title);
             let addnew='insert into zgprogram values("'+title+'",\''+content+'\',"'+max.toString().padStart(10,'0')+'",NOW(),0,NOW())';
-            console.log(addnew);
+            //console.log(addnew);
             conn.query(addnew,(err,result)=>{
                 if(err) throw err;
                 console.log(result);
@@ -118,7 +118,7 @@ app.post('/onenote', (req, res) => {
             content = refinestring(content);
             title = refinestring(title);
             let update='update zgprogram set title="'+title+'",content=\''+content+'\',accessdate=NOW() where idntfr="'+id+'"';
-            console.log(update);
+            // console.log(update);
             conn.query(update,(err,result)=>{
                 if(err) throw err;
                 console.log(result);

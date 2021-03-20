@@ -10,39 +10,46 @@ function go(){
         var searchtxt = document.getElementById('searchinput').value;
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {displaySearchResult(this);}
+            if (this.readyState == 4 && this.status == 200) {
+                console.log("go():searchtxt:"+searchtxt);
+                displaySearchResult(this);}
         };
         xhttp.open("GET", RESTAPISERVER+"/notes?search="+searchtxt, true);
         xhttp.send();
 }
+
 //Add new note
 function addnew() {
-    // var leave = true;
-    // if(document.pendingchange){
-    //     leave = confirm("You will LOST your local changes in current note. Leave?");
-    // }
-    // if(leave){
-        var title = document.getElementById('title').value;
-        if(title ==="" ) alert("Title can not be NULL");
-        else{
-            var markup = $('.notecontent').summernote('code');
-            // markup=markup.replaceAll('\'','\\\'');
-            // title=title.replaceAll('\'','\\\'');
-            const updateData = {"title":title, "content":markup};
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {doadd(this);}
-            };
-            xhttp.open("PUT", RESTAPISERVER+"/onenote", true);
-            xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhttp.send(JSON.stringify(updateData));
-        }
-//    }
+    var leave = true;
+    if(document.pendingchange){
+        leave = confirm("You will LOST your local changes in current note. Leave?");
+    }
+    if(leave){
+        var title = "//newadded/Title";
+        document.getElementById('title').value = title;
+        var markup = '';
+        $('.notecontent').summernote('code',markup);
+        document.pendingchange = false;
+        // markup=markup.replaceAll('\'','\\\'');
+        // title=title.replaceAll('\'','\\\'');
+        const updateData = {"title":title, "content":markup};
+        var xhttp = new XMLHttpRequest();
+        xhttp.timeout = 1000;
+        xhttp.ontimeout=function(){};
+        xhttp.onreadystatechange = function() {
+            // console.log("readState:"+this.readyState);
+            // console.log("status:"+this.status);
+            if (this.readyState == 4 && this.status == 200) {
+                    console.log("Add note done!?");
+                    go();
+                }
+        };
+        xhttp.open("PUT", RESTAPISERVER+"/onenote", true);
+        xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhttp.send(JSON.stringify(updateData));
+   }
 };
-function doadd(){
-    console.log("Add note done!?");
-    go();
-}
+
 
 function deleteNote(){
     if(!document.currentID) alert("Not note was selected!");
@@ -91,7 +98,9 @@ function updateOneNote(xhttp) {
 function loadAllNotes() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {displaySearchResult(this);}
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("loadAllNotes!");
+            displaySearchResult(this);}
     };
     xhttp.open("GET", RESTAPISERVER+"/notes?search=all", true);
     xhttp.send();
@@ -100,13 +109,16 @@ function displaySearchResult(xhttp) {
     var notes = JSON.parse(xhttp.responseText);
     var newContent = "<div class='booksGallery'><table>";
     document.currentID ='';
+    console.log("notes.length:"+notes.length);
     if (notes.length > 0){
         notes.forEach(function(note) {
             if(!document.currentID || document.currentID===''){
                 document.currentID = note.idntfr;
+                console.log("FirstIdntfr:"+note.idntfr);
             }
             var processedTitle = note.title;
             if (processedTitle.length > 50) { processedTitle = processedTitle.substring(0, 48) + "..."; } 
+            if (processedTitle === "") processedTitle = "____BLANK____";
             //newContent += `<tr><td><div class="gallery"><a target="_blank" href="${processedTitle}>"</a>`+
             newContent += `<tr><td><div class="gallery">`+
             // `<div id="id${note.idntfr}" onClick=getNoteDetails('${note.idntfr}') onMouseOver="onmouseover('${note.idntfr}')" class='galleryTitle'>${processedTitle}</div></div>`+
