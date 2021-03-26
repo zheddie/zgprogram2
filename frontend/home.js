@@ -14,7 +14,13 @@ function go(){
                 console.log("go():searchtxt:"+searchtxt);
                 displaySearchResult(this);}
         };
-        xhttp.open("GET", RESTAPISERVER+"/notes?search="+searchtxt, true);
+        var titleonly = document.getElementById('titlechk');
+        if(titleonly.checked){
+            xhttp.open("GET", RESTAPISERVER+"/notes?search="+searchtxt+"&searchtitle=yes", true);
+        }
+        else{
+            xhttp.open("GET", RESTAPISERVER+"/notes?search="+searchtxt, true);
+        }
         xhttp.send();
 }
 
@@ -187,6 +193,8 @@ function displayNoteDetail(xhttp) {
     // console.log(jsonData);
     var noteTitle = jsonData[0]['title'];
     var noteMain = jsonData[0]['content'];
+    var dispdate = jsonData[0]['accessdate'];
+    // dispdate = dispdate.substring(5,10)+"/"+dispdate.substring(11,16);
     if (document.currentID) {
         var div = document.getElementById("id"+document.currentID);
         if(div){
@@ -201,6 +209,7 @@ function displayNoteDetail(xhttp) {
         div.style.color="white";
     }
     document.getElementById("title").value = noteTitle;
+    document.getElementById("accessdate").innerHTML =dispdate;
     $('.notecontent').summernote("code",noteMain);
     document.pendingchange = false;
 } 
