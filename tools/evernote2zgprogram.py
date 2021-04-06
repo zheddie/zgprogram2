@@ -23,7 +23,7 @@ def handleonefile(file,max):
     except:
         print(query)
     
-db=mysql.connect(host="mysqlserver",user="root",passwd="passw0rd",auth_plugin='mysql_native_password')
+db=mysql.connect(host="mysqlserver2",user="root",passwd="passw0rd",auth_plugin='mysql_native_password')
 print(db)
 cursor = db.cursor()
 cursor.execute("use zgdata")

@@ -96,7 +96,8 @@ app.put('/onenote', (req, res) => {
             content = refinestring(content);
             title = refinestring(title);
             let addnew='insert into zgprogram values("'+title+'",\''+content+'\',"'+max.toString().padStart(10,'0')+'",NOW(),0,NOW())';
-            //console.log(addnew);
+            let dispaddnew='insert into zgprogram values("'+title+'",\''+content.substring(0,10)+'...\',"'+max.toString().padStart(10,'0')+'",NOW(),0,NOW())';
+            console.log(dispaddnew);
             conn.query(addnew,(err,result)=>{
                 if(err) throw err;
                 console.log(result);
@@ -111,7 +112,7 @@ app.put('/onenote', (req, res) => {
 app.post('/onenote', (req, res) => {
     try {
         let noteInfo = req.body;
-        console.log(noteInfo);
+        // console.log(noteInfo);
         let id = req.query.id;
         let title = '';
         let content = '';
@@ -123,10 +124,13 @@ app.post('/onenote', (req, res) => {
             content = refinestring(content);
             title = refinestring(title);
             let update='update zgprogram set title="'+title+'",content=\''+content+'\',accessdate=NOW() where idntfr="'+id+'"';
-            // console.log(update);
+            let dispupdate='update zgprogram set title="'+title+'",content=\''+content.substring(0,10)+'...\',accessdate=NOW() where idntfr="'+id+'"';
+            console.log(dispupdate);
             conn.query(update,(err,result)=>{
-                if(err) throw err;
-                console.log(result);
+                if(err) {
+                    console.log(result);
+                    throw err;
+                }
             });
             res.send({'success': 'Update note successfully.'});
         }

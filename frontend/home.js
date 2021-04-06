@@ -1,5 +1,6 @@
 const RESTAPISERVER="http://localhost:18701";
 //Try to capture the CMD+s to do the save.
+
 document.addEventListener("keydown", function(e) {
     if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && e.keyCode == 83) {
       e.preventDefault();
