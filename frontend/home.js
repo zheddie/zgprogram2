@@ -9,6 +9,7 @@ document.addEventListener("keydown", function(e) {
   }, false);
 function go(){
         var searchtxt = document.getElementById('searchinput').value;
+        console.log(searchtxt);
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -102,16 +103,16 @@ function updateOneNote(xhttp) {
     document.pendingchange = false;
 }
 
-function loadAllNotes() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log("loadAllNotes!");
-            displaySearchResult(this);}
-    };
-    xhttp.open("GET", RESTAPISERVER+"/notes?search=all", true);
-    xhttp.send();
-}
+// function loadAllNotes() {
+//     var xhttp = new XMLHttpRequest();
+//     xhttp.onreadystatechange = function() {
+//         if (this.readyState == 4 && this.status == 200) {
+//             console.log("loadAllNotes!");
+//             displaySearchResult(this);}
+//     };
+//     xhttp.open("GET", RESTAPISERVER+"/notes?search=all", true);
+//     xhttp.send();
+// }
 function displaySearchResult(xhttp) {
     var notes = JSON.parse(xhttp.responseText);
     var newContent = "<div class='booksGallery'><table>";
@@ -150,6 +151,7 @@ function displaySearchResult(xhttp) {
     console.log("currentID:"+document.currentID);
     // console.log(document.currentID);
     getNoteDetails(document.currentID);
+    document.pendingchange = false;
 }
 function itemmouseover(id){
     var idstr="id"+id;
@@ -182,6 +184,7 @@ function getNoteDetails(idntfr) {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {displayNoteDetail(this);}
+                document.pendingchange = false;
             };
             
             xhttp.open("GET", RESTAPISERVER+`/onenote?id=${idntfr}`, true);

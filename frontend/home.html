@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+        <title>MyNote</title>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     
@@ -13,15 +13,23 @@
         <script src='./home.js'></script>
     </head>
     <body>
-        <table width="100%">
-        <tr><td colspan="2"> 
+    <table width="100%">
+        <tr>
+        <td colspan="2"> 
+            <table><tr><!--td>
             <button  id="go" class="btn btn-primary" onclick="go()" type="button" >GO!</button>
-            <input id="searchinput" type="text" size=150 on_click="si_click()" autocomplete="on"> </input>
+            </td-->
+            <td>
+            <form target="remember" action="about:blank"  onsubmit="return go()">
+            <button type="submit" class="btn btn-primary">GO!<button/>
+            <input id="searchinput" type="text" onmouseover="this.select()" size=150 autocomplete="on"> </input>
+
             <input id="titlechk" type="checkbox" checked><label for="titleonly">TitleOnly</label>
+            </form>
             <script type="text/javascript">
                 var inp = document.getElementById("searchinput");
                 inp.addEventListener('keyup', function (e) {
-                    // console.log(e.key+e.keyCode);
+                    //console.log(e.key+e.keyCode);
                     if (e.key === 'Enter' || e.keyCode === 13) {
                         go();
                     }
@@ -29,12 +37,13 @@
             </script>
             <!-- <input type="checkbox"id="cbtitle" onclick="check_title()">Title</input>
             <input type="checkbox"id="cbtags" onclick="check_title()">Tags</input> -->
+        </td></tr></table>
         </td>
     </tr>
     <tr><td valign="top" >
         <br><h3 color="green">MyNote</h3><br>
         <div style="width:220px; max-width:220px;" id="searchResult"></div>
-        <script>loadAllNotes()</script>
+        <script>go()</script>
     </td>
     <td >
         <div style="width:1520px; max-width:1520px;" id="main">
@@ -92,5 +101,7 @@
     </td>
     </tr>
     </table>
+    <iframe id="remember" name="remember" class="hidden" visibility="hidden" display="none" ></iframe>
+    
     </body>
 </html>
