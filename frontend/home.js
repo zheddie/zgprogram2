@@ -1,12 +1,17 @@
 const RESTAPISERVER="http://localhost:18701";
 //Try to capture the CMD+s to do the save.
-
+var saveTimer = setInterval(doAutoSave, 1000*120);
+var displayTimer = setInterval(displayTimer, 1000);
 document.addEventListener("keydown", function(e) {
     if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && e.keyCode == 83) {
       e.preventDefault();
       UpdateNote();
+      clearInterval(saveTimer);
+      setInterval(doAutoSave, 1000*120);
+      
     }
   }, false);
+
 function go(){
         var searchtxt = document.getElementById('searchinput').value;
         console.log(searchtxt);
@@ -89,7 +94,10 @@ function UpdateNote() {
     const updateData = {"title":title, "content":markup};
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {updateOneNote(this);}
+        if (this.readyState == 4 && this.status == 200) {
+                updateOneNote(this);
+                document.seconds = 120;
+            }
     };
 
     xhttp.open("POST", RESTAPISERVER+"/onenote?id="+document.currentID, true);
@@ -125,12 +133,13 @@ function displaySearchResult(xhttp) {
                 console.log("FirstIdntfr:"+note.idntfr);
             }
             var processedTitle = note.title;
+            var shortnoteid = note.idntfr.slice(-5)
             if (processedTitle.length > 50) { processedTitle = processedTitle.substring(0, 48) + "..."; } 
             if (processedTitle === "") processedTitle = "____BLANK____";
             //newContent += `<tr><td><div class="gallery"><a target="_blank" href="${processedTitle}>"</a>`+
             newContent += `<tr><td><div class="gallery">`+
             // `<div id="id${note.idntfr}" onClick=getNoteDetails('${note.idntfr}') onMouseOver="onmouseover('${note.idntfr}')" class='galleryTitle'>${processedTitle}</div></div>`+
-            `<div id="id${note.idntfr}" onmouseover="itemmouseover('${note.idntfr}')" onmouseout="itemmouseout('${note.idntfr}')" onClick=getNoteDetails('${note.idntfr}') class='galleryTitle'>${processedTitle}</div></div>`+
+            `<div id="id${note.idntfr}" onmouseover="itemmouseover('${note.idntfr}')" onmouseout="itemmouseout('${note.idntfr}')" onClick=getNoteDetails('${note.idntfr}') class='galleryTitle'>${shortnoteid}${processedTitle}</div></div>`+
             `</td></tr>`;
             // newContent += `<div class="gallery"><a target="_blank" href="${book.web_url}">` + 
             //               `<img id="bookImage" src="${book.image_url}" width="600" height="400"></a>` + 
@@ -239,4 +248,18 @@ function onChooseFile(event, onLoadFileHandler) {
     let fr = new FileReader();
     fr.onload = onLoadFileHandler;
     fr.readAsText(file);
+}
+function doAutoSave(){
+    // console.log("in doAutoSave.");
+    if(document.pendingchange){
+        UpdateNote();
+    }else{
+        document.seconds = 120;
+    }
+}
+function displayTimer(){
+    if(!document.seconds){
+        document.seconds = 120;
+    }
+    document.getElementById("save").innerHTML = "Save:"+document.seconds--+"s";
 }

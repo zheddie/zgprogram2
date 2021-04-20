@@ -18,7 +18,7 @@ app.use(function (req, res, next) {
 //   };
 
 //setup mysql
-const MYSQL_CONFIG = {host:'mysqlserver2',user:'root',password:'passw0rd',port:3306,database:'zgdata'};
+const MYSQL_CONFIG = {host:'mysqlserver.zg2',user:'root',password:'passw0rd',port:3306,database:'zgdata'};
 
 const conn = mysql.createConnection(MYSQL_CONFIG);
 
@@ -30,11 +30,15 @@ app.get('/notes', (req, res) => {
     try {
         let search = req.query.search;
         let titleonly = req.query.searchtitle;
-        // console.log("search:"+search);
+        if (!titleonly){
+            titleonly = "";
+        }
+        console.log("search:"+search+",titleonly:"+titleonly);
         let query="select title,idntfr from zgprogram where status=0 ";
         if (search !== "all" && search!==""){
             let searcharr = search.split(' ');
             searcharr.forEach((oneitem)=>{
+
                 if(titleonly.toUpperCase() === 'YES'){
                     query += "and (title like '%"+oneitem+"%')";
                 }else{

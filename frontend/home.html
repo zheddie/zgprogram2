@@ -13,6 +13,7 @@
         <script src='./home.js'></script>
     </head>
     <body>
+
     <table width="100%">
         <tr>
         <td colspan="2"> 
@@ -48,13 +49,13 @@
     <td >
         <div style="width:1520px; max-width:1520px;" id="main">
         <table width="100%">
-            <tr><td><button id="save" class="btn btn-primary"  onclick="UpdateNote()">Save</button></td>
+            <tr><td width="200"><button id="save" class="btn btn-primary"  onclick="UpdateNote()" ></button></td>
                 <td><button id="addnew" class="btn btn-primary" onclick="addnew()">Add</button></td>
                 <td><input type='file' onchange='onChooseFile(event, onFileLoad.bind(this, "contents"))' /><p hidden id="contents" ></p></td>
                 <td><button id="delete" class="btn btn-danger" onclick="deleteNote()">Delete</button></td>
                 </tr>
-            <tr><td colspan="3"><input id="title" size=100></td><td><lable id="accessdate"></lable></td></tr>
-            <tr><td colspan="4">
+            <tr><td colspan="5"><input id="title" size=100><lable id="accessdate"></lable></td></tr>
+            <tr><td colspan="5">
             <div style="width:320px; max-width:320px;" class="notecontent" ></div>
         <script type="text/javascript">
             $('.notecontent').summernote({
