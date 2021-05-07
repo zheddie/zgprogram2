@@ -5,7 +5,11 @@ var displayTimer = setInterval(displayTimer, 1000);
 document.addEventListener("keydown", function(e) {
     if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && e.keyCode == 83) {
       e.preventDefault();
+    //   var range0 = $('.notecontent').summernote('editor.getLastRange');
       UpdateNote();
+    //   const range = $.summernote.range;  // range utility
+    //   // set my custom range
+    //   $('#summernote').summernote('editor.setLastRange', range.createFromNodeAfter(node).select());
       clearInterval(saveTimer);
       setInterval(doAutoSave, 1000*120);
       
@@ -21,9 +25,9 @@ function go(){
                 console.log("go():searchtxt:"+searchtxt);
                 displaySearchResult(this);}
         };
-        var titleonly = document.getElementById('titlechk');
-        if(titleonly.checked){
-            xhttp.open("GET", RESTAPISERVER+"/notes?search="+searchtxt+"&searchtitle=yes", true);
+        var contentsearch = document.getElementById('contentchk');
+        if(contentsearch.checked){
+            xhttp.open("GET", RESTAPISERVER+"/notes?search="+searchtxt+"&searchcontent=yes", true);
         }
         else{
             xhttp.open("GET", RESTAPISERVER+"/notes?search="+searchtxt, true);
@@ -97,6 +101,7 @@ function UpdateNote() {
         if (this.readyState == 4 && this.status == 200) {
                 updateOneNote(this);
                 document.seconds = 120;
+
             }
     };
 
@@ -261,5 +266,12 @@ function displayTimer(){
     if(!document.seconds){
         document.seconds = 120;
     }
-    document.getElementById("save").innerHTML = "Save:"+document.seconds--+"s";
+    //document.getElementById("save").innerHTML = "Save:"+document.seconds--+"s";
+    document.getElementById("time").innerHTML = document.seconds--+"s";
+    if (document.seconds < 30){
+        document.getElementById("time").style.color = "red";
+    }else{
+        document.getElementById("time").style.color = "black";
+    }
+
 }

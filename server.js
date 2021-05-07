@@ -29,20 +29,20 @@ app.get('/notes', (req, res) => {
     
     try {
         let search = req.query.search;
-        let titleonly = req.query.searchtitle;
-        if (!titleonly){
-            titleonly = "";
+        let searchcnt = req.query.searchcontent;
+        if (!searchcnt){
+            searchcnt = "NO_INPUT";
         }
-        console.log("search:"+search+",titleonly:"+titleonly);
+        console.log("search:"+search+",searchcnt:"+searchcnt);
         let query="select title,idntfr from zgprogram where status=0 ";
         if (search !== "all" && search!==""){
             let searcharr = search.split(' ');
             searcharr.forEach((oneitem)=>{
 
-                if(titleonly.toUpperCase() === 'YES'){
-                    query += "and (title like '%"+oneitem+"%')";
+                if(searchcnt.toUpperCase() !== 'YES'){
+                    query += "and (title like '%"+oneitem+"%') or (idntfr like '%"+oneitem+"%')";
                 }else{
-                    query += "and (content like '%"+oneitem+"%' or title like '%"+oneitem+"%')";
+                    query += "and (content like '%"+oneitem+"%' or title like '%"+oneitem+"%') or (idntfr like '%"+oneitem+"%')";
                 }
             });
         }
