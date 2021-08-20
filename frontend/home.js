@@ -1,7 +1,8 @@
 const RESTAPISERVER="http://localhost:18701";
 //Try to capture the CMD+s to do the save.
-var saveTimer = setInterval(doAutoSave, 1000*120);
-var displayTimer = setInterval(displayTimer, 1000);
+// var saveTimer = setInterval(doAutoSave, 1000*120);
+//var displayTimer = setInterval(displayTimer, 1000);
+var RefreshButton = setInterval(RefreshButton, 1000);
 document.addEventListener("keydown", function(e) {
     if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && e.keyCode == 83) {
       e.preventDefault();
@@ -10,8 +11,8 @@ document.addEventListener("keydown", function(e) {
     //   const range = $.summernote.range;  // range utility
     //   // set my custom range
     //   $('#summernote').summernote('editor.setLastRange', range.createFromNodeAfter(node).select());
-      clearInterval(saveTimer);
-      setInterval(doAutoSave, 1000*120);
+    //   clearInterval(saveTimer);
+    //   setInterval(doAutoSave, 1000*120);
       
     }
   }, false);
@@ -100,7 +101,7 @@ function UpdateNote() {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
                 updateOneNote(this);
-                document.seconds = 120;
+                // document.seconds = 120;
 
             }
     };
@@ -259,19 +260,30 @@ function doAutoSave(){
     if(document.pendingchange){
         UpdateNote();
     }else{
-        document.seconds = 120;
+//        document.seconds = 120;
     }
 }
-function displayTimer(){
-    if(!document.seconds){
-        document.seconds = 120;
+//Gavin.Temp remove the timer as it would always jump to start of the editor.
+    
+// function displayTimer(){
+//     if(!document.seconds){
+//         document.seconds = 120;
+//     }
+//     //document.getElementById("save").innerHTML = "Save:"+document.seconds--+"s";
+//     document.getElementById("time").innerHTML = document.seconds--+"s";
+//     if (document.seconds < 30){
+//         document.getElementById("time").style.color = "red";
+//     }else{
+//         document.getElementById("time").style.color = "black";
+//     }
+
+// }
+function RefreshButton(){
+    if(document.pendingchange){
+        document.getElementById("save").innerHTML = "****Save";  
     }
-    //document.getElementById("save").innerHTML = "Save:"+document.seconds--+"s";
-    document.getElementById("time").innerHTML = document.seconds--+"s";
-    if (document.seconds < 30){
-        document.getElementById("time").style.color = "red";
-    }else{
-        document.getElementById("time").style.color = "black";
+    else{
+        document.getElementById("save").innerHTML = "SAVE"; 
     }
 
 }
