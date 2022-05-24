@@ -49,12 +49,12 @@ app.get('/notes', (req, res) => {
         query+="order by accessdate desc limit 30";
         console.log(query);
         conn.query(query,(err,result)=>{
-            if(err) throw err;
-            // console.log(result);
+            if(err) {
+                console.log(result);
+                throw err;
+            }
             res.json(result);
-            //res.json(JSON.parse(data));
-        });
-        
+        }); 
     } catch (err) {
         res.send({'error': err.toString()});
     }
@@ -71,7 +71,10 @@ app.get('/onenote', (req, res) => {
             query="select * from zgprogram where idntfr like '%"+id+"'";
             console.log(query);
             conn.query(query,(err,result)=>{
-                if(err) throw err;
+                if(err) {
+                    console.log(result);
+                    throw err;
+                }
                 res.json(result);
             });
         }
@@ -94,7 +97,10 @@ app.put('/onenote', (req, res) => {
         if(noteInfo.content) content=noteInfo.content;
         let query = 'select max(convert(idntfr,unsigned integer)) as max from zgprogram';
         conn.query(query,(err,result)=>{
-            if(err) throw err;
+            if(err) {
+                console.log(result);
+                throw err;
+            }
             //rt = JSON.parse(result);
             let max= result[0].max+1;
             content = refinestring(content);
@@ -103,8 +109,10 @@ app.put('/onenote', (req, res) => {
             let dispaddnew='insert into zgprogram values("'+title+'",\''+content.substring(0,10)+'...\',"'+max.toString().padStart(10,'0')+'",NOW(),0,NOW())';
             console.log(dispaddnew);
             conn.query(addnew,(err,result)=>{
-                if(err) throw err;
-                console.log(result);
+                if(err) {
+                    console.log(result);
+                    throw err;
+                }
             });
         });
         res.send({'success': 'Add new note successfully.'});
@@ -149,8 +157,10 @@ app.delete('/onenote', (req, res) => {
         let strdelete='update zgprogram set status=-3 where idntfr="'+id+'"';
         console.log(strdelete);
         conn.query(strdelete,(err,result)=>{
-            if(err) throw err;
-            console.log(result);
+            if(err) {
+                console.log(result);
+                throw err;
+            }
         });
         res.send({'success': 'Delete note successfully.'});
     } catch (err) {
