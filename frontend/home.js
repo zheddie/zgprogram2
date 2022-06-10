@@ -6,7 +6,7 @@ var RefreshButton = setInterval(RefreshButton, 1000);
 document.addEventListener("keydown", function(e) {
     if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && e.keyCode == 83) {
       e.preventDefault();
-    //   var range0 = $('.notecontent').summernote('editor.getLastRange');
+    //   var range0 = $('#summernote').summernote('editor.getLastRange');
       UpdateNote();
     //   const range = $.summernote.range;  // range utility
     //   // set my custom range
@@ -46,7 +46,7 @@ function addnew() {
         var title = "//newadded/Title";
         document.getElementById('title').value = title;
         var markup = '';
-        $('.notecontent').summernote('code',markup);
+        $('#summernote').summernote('code',markup);
         document.pendingchange = false;
         // markup=markup.replaceAll('\'','\\\'');
         // title=title.replaceAll('\'','\\\'');
@@ -89,7 +89,7 @@ function dodelete(xhttp) {
     go();
 };
 function UpdateNote() {
-    var markup = $('.notecontent').summernote('code');
+    var markup = $('#summernote').summernote('code');
     var title = document.getElementById('title').value;
     // markup=markup.replaceAll('\'','\\\'');
     // title=title.replaceAll('\'','\\\'');
@@ -193,7 +193,7 @@ function getNoteDetails(idntfr) {
     }
     if (leave){
         if(idntfr === ''){
-            $('.notecontent').summernote("code",'');
+            $('#summernote').summernote("code",'');
             document.getElementById("title").value = '';
         }else{
             var xhttp = new XMLHttpRequest();
@@ -229,7 +229,7 @@ function displayNoteDetail(xhttp) {
     }
     document.getElementById("title").value = noteTitle;
     document.getElementById("accessdate").innerHTML =dispdate;
-    $('.notecontent').summernote("code",noteMain);
+    $('#summernote').summernote("code",noteMain);
     document.pendingchange = false;
 } 
 
@@ -237,7 +237,7 @@ function displayNoteDetail(xhttp) {
 //For file load . 
 function onFileLoad(elementId, event) {
     document.getElementById(elementId).innerText = event.target.result;
-    $(".notecontent").summernote("code",event.target.result);
+    $('#summernote').summernote("code",event.target.result);
 }
 
 function onChooseFile(event, onLoadFileHandler) {

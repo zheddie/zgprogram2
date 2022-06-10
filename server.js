@@ -18,7 +18,10 @@ app.use(function (req, res, next) {
 //   };
 
 //setup mysql
-const MYSQL_CONFIG = {host:'mysqlserver.zg2',user:'root',password:'passw0rd',port:3306,database:'zgdata'};
+// const MYSQL_CONFIG = {host:'mysqlserver.zg2',user:'root',password:'passw0rd',port:3306,database:'zgdata'};
+//For access from the host's node.
+const MYSQL_CONFIG = {host:'127.0.0.1',user:'root',password:'passw0rd',port:3306,database:'zgdata'};
+
 
 const conn = mysql.createConnection(MYSQL_CONFIG);
 
@@ -40,9 +43,11 @@ app.get('/notes', (req, res) => {
             searcharr.forEach((oneitem)=>{
 
                 if(searchcnt.toUpperCase() !== 'YES'){
-                    query += "and (title like '%"+oneitem+"%') or (idntfr like '%"+oneitem+"%')";
+                    // query += "and (title like '%"+oneitem+"%') or (idntfr like '%"+oneitem+"%')";
+                    query += "and (title like '%"+oneitem+"%') ";
                 }else{
-                    query += "and (content like '%"+oneitem+"%' or title like '%"+oneitem+"%') or (idntfr like '%"+oneitem+"%')";
+                    // query += "and (content like '%"+oneitem+"%' or title like '%"+oneitem+"%') or (idntfr like '%"+oneitem+"%') ";
+                    query += "and (content like '%"+oneitem+"%' or title like '%"+oneitem+"%') ";
                 }
             });
         }
