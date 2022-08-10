@@ -23,10 +23,35 @@ app.use(function (req, res, next) {
 const MYSQL_CONFIG = {host:'127.0.0.1',user:'root',password:'passw0rd',port:3306,database:'zgdata'};
 
 
-const conn = mysql.createConnection(MYSQL_CONFIG);
+// const conn = mysql.createConnection(MYSQL_CONFIG);
 
-conn.connect();
+// conn.connect();
 
+var conn;
+
+function handleDisconnect() {
+    conn = mysql.createConnection(MYSQL_CONFIG); // Recreate the connection, since
+                                                  // the old one cannot be reused.
+
+    conn.connect(function(err) {              // The server is either down
+    if(err) {                                     // or restarting (takes a while sometimes).
+      console.log('error when connecting to db:', err);
+      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+    }                                     // to avoid a hot loop, and to allow our node script to
+    console.log('SUCCESS: Connection created.');
+  });                                     // process asynchronous requests in the meantime.
+                                          // If you're also serving http, display a 503 error.
+    conn.on('error', function(err) {
+    console.log('db error', err);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+      handleDisconnect();                         // lost due to either server restart, or a
+    } else {                                      // connnection idle timeout (the wait_timeout
+      throw err;                                  // server variable configures this)
+    }
+  });
+}
+
+handleDisconnect();
 // Get all notes
 app.get('/notes', (req, res) => {
     
@@ -54,8 +79,8 @@ app.get('/notes', (req, res) => {
         query+="order by accessdate desc limit 30";
         console.log(query);
         conn.query(query,(err,result)=>{
+            console.log(result);
             if(err) {
-                console.log(result);
                 throw err;
             }
             res.json(result);
