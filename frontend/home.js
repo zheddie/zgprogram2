@@ -151,7 +151,7 @@ function displaySearchResult(xhttp) {
             //newContent += `<tr><td><div class="gallery"><a target="_blank" href="${processedTitle}>"</a>`+
             newContent += `<tr><td><div class="gallery">`+
             // `<div id="id${note.idntfr}" onClick=getNoteDetails('${note.idntfr}') onMouseOver="onmouseover('${note.idntfr}')" class='galleryTitle'>${processedTitle}</div></div>`+
-            `<div id="id${note.idntfr}" onmouseover="itemmouseover('${note.idntfr}')" onmouseout="itemmouseout('${note.idntfr}')" onClick=getNoteDetails('${note.idntfr}') class='galleryTitle'>${processedTitle}</div></div>`+
+            `<div id="id${note.idntfr}" onmouseover="itemmouseover('${note.idntfr}')" onmouseout="itemmouseout('${note.idntfr}')" onClick=getNoteDetails('${note.idntfr}') class='galleryTitle'>${shortnoteid}${processedTitle}</div></div>`+
             `</td></tr>`;
             // newContent += `<div class="gallery"><a target="_blank" href="${book.web_url}">` + 
             //               `<img id="bookImage" src="${book.image_url}" width="600" height="400"></a>` + 
