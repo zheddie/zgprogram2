@@ -22,7 +22,7 @@ document.addEventListener("keydown", function(e) {
 
 function go(){
         var searchtxt = document.getElementById('searchinput').value;
-        console.log(searchtxt);
+        console.log("go.cp0:"+searchtxt);
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -45,6 +45,7 @@ function addnew() {
     if(document.pendingchange){
         leave = confirm("You will LOST your local changes in current note. Leave?");
     }
+    console.log("addnew.cp0.leave:"+leave);
     if(leave){
         $('#summernote').summernote('disable');
         var title = "//newadded/Title";
@@ -61,9 +62,11 @@ function addnew() {
         xhttp.onreadystatechange = function() {
             // console.log("readState:"+this.readyState);
             // console.log("status:"+this.status);
-            // if (this.readyState == 4 && this.status == 200) {
+            //Fix the issue of "Add" always failed on Firefox. 
+            //Need the status and readyState check.
+            if (this.readyState == 4 && this.status == 200) {
                     refreshpage("Add note done!?");
-                // }
+                }
         };
         xhttp.open("PUT", RESTAPISERVER+"/onenote", true);
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
