@@ -79,7 +79,7 @@ app.get('/notes', (req, res) => {
         query+="order by accessdate desc limit 30";
         console.log(query);
         conn.query(query,(err,result)=>{
-            console.log(result);
+            // console.log(result);
             if(err) {
                 throw err;
             }
@@ -125,7 +125,9 @@ app.put('/onenote', (req, res) => {
         let content = '';
         if(noteInfo.title) title=noteInfo.title;
         if(noteInfo.content) content=noteInfo.content;
+        console.log(noteInfo);
         let query = 'select max(convert(idntfr,unsigned integer)) as max from zgprogram';
+        console.log(query);
         conn.query(query,(err,result)=>{
             if(err) {
                 console.log(result);
