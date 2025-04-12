@@ -4,7 +4,10 @@
 //var displayTimer = setInterval(displayTimer, 1000);
 var RefreshButton = setInterval(RefreshButton, 1000);
 var HostName  = window.location.hostname
-var RESTAPISERVER="http://"+HostName+":18701";
+//var RESTAPISERVER="http://"+HostName+":8701";
+//Try to using fixed names, which need to define in /etc/hosts
+var RESTAPISERVER="http://zgprogram2b.zg.com:8701";
+
 console.log("RESTAPISERVER:"+RESTAPISERVER);
 document.addEventListener("keydown", function(e) {
     if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && e.keyCode == 83) {
@@ -22,7 +25,7 @@ document.addEventListener("keydown", function(e) {
 
 function go(){
         var searchtxt = document.getElementById('searchinput').value;
-        console.log(searchtxt);
+        console.log("go.cp0:"+searchtxt);
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -45,7 +48,9 @@ function addnew() {
     if(document.pendingchange){
         leave = confirm("You will LOST your local changes in current note. Leave?");
     }
+    console.log("addnew.cp0.leave:"+leave);
     if(leave){
+        document.getElementById('searchinput').value = "";
         $('#summernote').summernote('disable');
         var title = "//newadded/Title";
         // document.getElementById('title').value = title;
@@ -61,9 +66,11 @@ function addnew() {
         xhttp.onreadystatechange = function() {
             // console.log("readState:"+this.readyState);
             // console.log("status:"+this.status);
-            // if (this.readyState == 4 && this.status == 200) {
+            //Fix the issue of "Add" always failed on Firefox. 
+            //Need the status and readyState check.
+            if (this.readyState == 4 && this.status == 200) {
                     refreshpage("Add note done!?");
-                // }
+                }
         };
         xhttp.open("PUT", RESTAPISERVER+"/onenote", true);
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
